@@ -4,6 +4,7 @@ export { FormState } from './constants';
 export { default as FormController } from './FormController';
 export { default as FormGroupController } from './FormGroupController';
 export { default as InputController } from './InputController';
+export { default as FormGroup } from './FormGroup';
 export { default as TextInput } from './TextInput';
 export { default as TextField } from './TextField';
 

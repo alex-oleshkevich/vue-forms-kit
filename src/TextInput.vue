@@ -13,7 +13,7 @@ export default {
         cssClasses() {
             return {
                 'form-input': true,
-                [`form-size-${this.size}`]: true,
+                [`form-input-${this.size}`]: true,
             };
         },
     },

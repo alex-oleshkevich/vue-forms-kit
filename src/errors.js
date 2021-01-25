@@ -8,7 +8,7 @@ export function axiosErrorHandler(e) {
  * @param {Error} e
  */
 export function guessErrorHandler(e) {
-    if (e.hasOwnProperty('response')) {
+    if ('response' in e) {
         return axiosErrorHandler(e);
     }
 

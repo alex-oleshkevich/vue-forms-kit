@@ -1,6 +1,16 @@
 import { FormState } from './constants';
 import { Config } from './config';
 
+/**
+ * Provides a generic API for forms.
+ *
+ * Props:
+ *  handler (function) - a form submission handler
+ *  errorHandler (function) - a submit error handler
+ *  validator (function) - a function that performs validation
+ *  data (object) - initial form data
+ *  errors (object) - initial form errors
+ */
 export default {
     props: {
         handler: { type: [Function], required: true },
@@ -8,7 +18,10 @@ export default {
             type: [Function],
             default: Config.responseErrorHandler,
         },
-        validator: { type: Function, default: () => true },
+        validator: {
+            type: Function,
+            default: () => ({}),
+        },
         data: { type: Object, required: true },
         errors: {
             type: Object,
@@ -49,34 +62,26 @@ export default {
         },
 
         async submit() {
-            this.responseMessage = null;
-            this.fieldErrors = {};
-            this.state = FormState.LOADING;
             let { isValid, errors } = await this.validate(this.formData);
             if (isValid) {
-                this.doSubmit(this.formData)
-                    .then(response => {
-                        this.state = FormState.READY;
-                        this.$emit('response', response);
-                    })
-                    .catch(e => {
-                        this.state = FormState.ERROR;
-                        this.handleResponseError(e);
-                    });
+                try {
+                    this.responseMessage = null;
+                    this.fieldErrors = {};
+                    this.state = FormState.LOADING;
+                    const response = await this.handler(this.formData);
+                    this.state = FormState.READY;
+                    this.$emit('response', response);
+                } catch (e) {
+                    this.state = FormState.ERROR;
+                    let { message, errors } = this.errorHandler(e);
+                    this.setMessage(message);
+                    this.setErrors(errors);
+                    this.$emit('error', e);
+                }
             } else {
                 this.state = FormState.ERROR;
                 this.setErrors(errors);
             }
-        },
-
-        async doSubmit(data) {
-            return await this.handler(data);
-        },
-
-        handleResponseError(e) {
-            let { message, errors } = this.errorHandler(e);
-            this.setMessage(message);
-            this.setErrors(errors);
         },
 
         async validate(data) {
@@ -104,9 +109,9 @@ export default {
             {
                 attrs: this.$attrs,
                 on: {
-                    submit: e => {
+                    submit: async e => {
                         e.preventDefault();
-                        this.submit(e);
+                        await this.submit(e);
                     },
                 },
             },

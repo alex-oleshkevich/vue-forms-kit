@@ -1,55 +1,56 @@
 {
-  "name": "vue-forms-kit",
-  "version": "0.1.0",
-  "author": {
-    "email": "alex.oleshkevich@gmail.com",
-    "name": "Alex Oleshkevich",
-    "url": "https://github.com/alex-oleshkevich"
-  },
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint",
-    "build-storybook": "build-storybook",
-    "storybook": "start-storybook -p 6006"
-  },
-  "dependencies": {
-    "core-js": "^3.6.5",
-    "vue": "^2.6.11"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@storybook/addon-actions": "^6.1.15",
-    "@storybook/addon-essentials": "^6.1.15",
-    "@storybook/addon-links": "^6.1.15",
-    "@storybook/vue": "^6.1.15",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-unit-jest": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/test-utils": "^1.0.3",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.2.2",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "prettier": "^1.19.1",
-    "vue-template-compiler": "^2.6.11"
-  },
-  "prettier": {
-    "tabWidth": 4,
-    "trailingComma": "all",
-    "singleQuote": true,
-    "bracketSpacing": true,
-    "semi": true
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ],
-  "jest": {
-    "preset": "@vue/cli-plugin-unit-jest"
-  },
-  "license": "MIT"
+    "name": "vue-forms-kit",
+    "version": "0.1.0",
+    "author": {
+        "email": "alex.oleshkevich@gmail.com",
+        "name": "Alex Oleshkevich",
+        "url": "https://github.com/alex-oleshkevich"
+    },
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "test:unit": "vue-cli-service test:unit",
+        "lint": "vue-cli-service lint",
+        "build-storybook": "build-storybook",
+        "storybook": "start-storybook -p 6006"
+    },
+    "dependencies": {
+        "core-js": "^3.6.5",
+        "vue": "^2.6.11"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.12.10",
+        "@storybook/addon-actions": "^6.1.15",
+        "@storybook/addon-essentials": "^6.1.15",
+        "@storybook/addon-links": "^6.1.15",
+        "@storybook/vue": "^6.1.15",
+        "@vue/cli-plugin-babel": "~4.5.0",
+        "@vue/cli-plugin-eslint": "~4.5.0",
+        "@vue/cli-plugin-unit-jest": "~4.5.0",
+        "@vue/cli-service": "~4.5.0",
+        "@vue/test-utils": "^1.0.3",
+        "babel-eslint": "^10.1.0",
+        "babel-loader": "^8.2.2",
+        "eslint": "^6.7.2",
+        "eslint-plugin-vue": "^6.2.2",
+        "prettier": "^1.19.1",
+        "vue-template-compiler": "^2.6.11"
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "trailingComma": "all",
+        "singleQuote": true,
+        "bracketSpacing": true,
+        "semi": true
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ],
+    "jest": {
+        "preset": "@vue/cli-plugin-unit-jest",
+        "verbose": true
+    },
+    "license": "MIT"
 }

@@ -13,10 +13,10 @@ export default {
 
 <template>
     <form-group-controller
-        v-slot="{ errors, required, inputId }"
+        v-slot="{ errors, required, inputId, valid }"
         :errors="errors"
     >
-        <div class="form-group">
+        <div class="form-group" :class="{'invalid': !valid}">
             <label class="form-label" :for="inputId">
                 <slot name="label" :label="label" :required="required">
                     <span>{{ label }}</span>
@@ -24,12 +24,12 @@ export default {
                 <span class="form-label-asterisk" v-if="required">*</span>
             </label>
             <slot></slot>
-            <div class="form-help">
+            <div class="form-help" v-if="help || $scopedSlots.help">
                 <slot name="help" :help="help">
                     {{ help }}
                 </slot>
             </div>
-            <div class="form-errors" v-if="errors.length">
+            <div class="form-errors" v-if="errors.length || $scopedSlots.errors">
                 <slot name="errors" :errors="errors">
                     <ul>
                         <li
