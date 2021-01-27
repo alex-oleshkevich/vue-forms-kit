@@ -1,0 +1,11 @@
+.vscode
+.idea
+.storybook
+.git
+tests
+.eslintrc.js
+Demo.vue
+babel.config.js
+.prettierrc
+src/stories
+*.tgz
