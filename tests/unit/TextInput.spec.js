@@ -1,9 +1,8 @@
 import { mount } from '@vue/test-utils';
 import { TextInput } from '../../src/index.js';
-import { nextTick } from 'vue';
 
 describe('TextInput.js', () => {
-    it('renders value', async () => {
+    it('renders value',  () => {
         const wrapper = mount(TextInput, {
             propsData: {
                 value: 'The value.',
@@ -12,7 +11,7 @@ describe('TextInput.js', () => {
         expect(wrapper.find('input').element.value).toBe('The value.');
     });
 
-    it('renders size class', async () => {
+    it('renders size class',  () => {
         const wrapper = mount(TextInput, {
             propsData: {
                 size: 'lg',
@@ -23,22 +22,55 @@ describe('TextInput.js', () => {
         );
     });
 
-    it('renders required attribute', async () => {
+    it('renders required attribute', () => {
         const wrapper = mount(TextInput, {
             propsData: {
                 required: true,
             },
         });
-        await nextTick();
         expect(wrapper.find('input').attributes('required')).toBeTruthy();
     });
 
-    it('emits input event', async () => {
-        const wrapper = mount(TextInput);
-        const input = wrapper.find('input');
-        await input.setValue('new');
+    it('sets custom attribute',  () => {
+        const wrapper = mount(TextInput, {
+            attrs: { tabindex: 10 },
+        });
+        expect(wrapper.find('input').attributes('tabindex')).toEqual('10');
+    });
 
-        expect(input.element.value).toBe('new');
-        // expect(wrapper.emitted().input[0]).toEqual(['new']);
+    it('emits input event', () => {
+        const spy = jest.fn();
+        const wrapper = mount(TextInput, { listeners: { input: spy } });
+        const input = wrapper.find('input');
+        input.element.value = 'new';
+        input.trigger('input');
+
+        expect(spy).toBeCalledWith('new');
+    });
+
+    it('emits change event', () => {
+        const spy = jest.fn();
+        const wrapper = mount(TextInput, { listeners: { change: spy } });
+        const input = wrapper.find('input');
+        input.element.value = 'new';
+        input.trigger('change');
+
+        expect(spy).toBeCalledWith('new');
+    });
+
+    it('emits focus event', () => {
+        const spy = jest.fn();
+        const wrapper = mount(TextInput, { listeners: { focus: spy } });
+        wrapper.find('input').trigger('focus');
+
+        expect(spy).toBeCalledTimes(1);
+    });
+
+    it('emits blur event', () => {
+        const spy = jest.fn();
+        const wrapper = mount(TextInput, { listeners: { blur: spy } });
+        wrapper.find('input').trigger('blur');
+
+        expect(spy).toBeCalledTimes(1);
     });
 });

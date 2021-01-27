@@ -78,7 +78,11 @@ export default {
          * @param {Event} e
          */
         onChange(e) {
-            this.$emit('change', e);
+            if (e instanceof Event) {
+                this.$emit('change', e.target.value);
+            } else {
+                this.$emit('change', e);
+            }
         },
 
         /**
