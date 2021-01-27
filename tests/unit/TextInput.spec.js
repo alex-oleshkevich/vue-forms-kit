@@ -2,7 +2,12 @@ import { mount } from '@vue/test-utils';
 import { TextInput } from '../../src/index.js';
 
 describe('TextInput.js', () => {
-    it('renders value',  () => {
+    it('sets text type', () => {
+        const wrapper = mount(TextInput);
+        expect(wrapper.find('input').attributes('type')).toEqual('text');
+    });
+
+    it('renders value', () => {
         const wrapper = mount(TextInput, {
             propsData: {
                 value: 'The value.',
@@ -11,7 +16,7 @@ describe('TextInput.js', () => {
         expect(wrapper.find('input').element.value).toBe('The value.');
     });
 
-    it('renders size class',  () => {
+    it('renders size class', () => {
         const wrapper = mount(TextInput, {
             propsData: {
                 size: 'lg',
@@ -31,7 +36,7 @@ describe('TextInput.js', () => {
         expect(wrapper.find('input').attributes('required')).toBeTruthy();
     });
 
-    it('sets custom attribute',  () => {
+    it('sets custom attribute', () => {
         const wrapper = mount(TextInput, {
             attrs: { tabindex: 10 },
         });
