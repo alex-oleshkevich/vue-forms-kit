@@ -97,7 +97,7 @@ to use as the input. In this case your can specify `input-selector` property to 
 `input-selector` accept any CSS select that is also valid for `querySelector` native method.
 
 ```html
-<input-controller input-selector="#iput">
+<input-controller input-selector="#input">
     <div>
         <input id="input" />
     </div>
