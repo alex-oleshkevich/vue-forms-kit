@@ -25,7 +25,7 @@ The tutorial assumes that you are familiar with scoped slots.
 
 ### Form inputs
 
-Lets that with the smallest entity - the form input:
+Let's start with the smallest entity - the form input:
 
 ```html
 <script>
