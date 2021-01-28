@@ -38,6 +38,9 @@ export default {
             );
         });
     },
+    updated() {
+        this.$emit('required', this.findInput().required);
+    },
     methods: {
         findInput() {
             let el = this.$el;

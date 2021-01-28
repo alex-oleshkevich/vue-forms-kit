@@ -51,7 +51,7 @@ export default {
 
 <template>
     <div>
-        you name: {{ formData.first_name }}
+        you name: {{ formData.first_name }}, required="{{ required }}"
         <br />
         <br />
 

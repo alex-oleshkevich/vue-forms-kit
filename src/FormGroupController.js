@@ -43,13 +43,18 @@ export default {
             const onError = fieldErrors => {
                 this.setErrors(fieldErrors);
             };
+            const onRequiredChanged = flag => {
+                this.required = flag;
+            };
             input.$on('input', onInput);
             input.$on('error', onError);
+            input.$on('required', onRequiredChanged);
 
             this.$form.attachInput(input);
             this.$once('hook:beforeDestroy', () => {
                 input.$off('input', onInput);
                 input.$off('error', onError);
+                input.$off('required', onRequiredChanged);
             });
         },
         detachInput(input) {

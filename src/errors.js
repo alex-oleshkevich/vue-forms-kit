@@ -12,7 +12,11 @@ export function guessErrorHandler(e) {
         return axiosErrorHandler(e);
     }
 
-    console.error(e);
+    if ('errors' in e) {
+        let { message, errors } = e;
+        return { message, errors };
+    }
+
     return {
         message: e.toString(),
         errors: {},

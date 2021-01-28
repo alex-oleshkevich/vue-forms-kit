@@ -31,6 +31,7 @@ Let's start with the smallest entity - the form input:
 <script>
     // TextInput.vue
     import { InputController } from 'vue-forms-kit';
+
     export default {
         components: { InputController },
     };
@@ -105,12 +106,12 @@ Let's reduce it by introducing a new concept: "form fields". The form field is a
         props: {
             label: String,
             help: String,
-        }
+        },
     };
 </script>
 <template>
     <form-group :label="label" :help="help">
-        <text-input v-bind="$attrs" v-on="$listeners">
+        <text-input v-bind="$attrs" v-on="$listeners" />
     </form-group>
 </template>
 ```
@@ -166,7 +167,23 @@ The form controller requires the following properties:
                 return errors;
             },
             async submit(formData) {
-                // does nothing for now, but you may issue an API call in this place
+                async function wait() {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            if (formData.email.indexOf('error') !== -1) {
+                                reject({
+                                    message: 'Form submission error.',
+                                    errors: {
+                                        email: 'This value is invalid.',
+                                    },
+                                });
+                            } else {
+                                resolve();
+                            }
+                        }, 1000);
+                    });
+                }
+                await wait();
             },
         },
     };
@@ -179,11 +196,20 @@ The form controller requires the following properties:
         v-slot="{state, message}"
     >
         <div v-if="message">Error message: {{ message }}</div>
-        <text-field name="first_name" v-model="formData.first_name" />
-        <text-field name="last_name" v-model="formData.last_name" />
+        <text-field
+            name="first_name"
+            label="First name"
+            v-model="formData.first_name"
+        />
+        <text-field
+            name="last_name"
+            label="Last name"
+            v-model="formData.last_name"
+        />
         <text-field
             type="email"
             name="email"
+            label="Email"
             required
             v-model="formData.email"
         />
@@ -196,6 +222,9 @@ The form is ready to use. I want to point you at some moments.
 First, the form exposes the `state` property that you can use to react to form state transition.
 For example, we disabled the submit button while the form was handling the submission.
 Second, if the API returns an error message, we can display it to use. Use the `message` key to access the message value.
+
+If you want to test error response, include "error" string in the email input.
+For example, "error@example.com".
 
 More information about validation, submission, and error handling you can find in other sections.
 
