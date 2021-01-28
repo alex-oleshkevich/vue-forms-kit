@@ -53,6 +53,7 @@ First, we will create a "form group" component that will receive label text and 
 <script>
     // FormGroup.vue
     import { FormGroupController } from 'vue-forms-kit';
+
     export default {
         components: { FormGroupController },
         props: {
@@ -98,8 +99,9 @@ Let's reduce it by introducing a new concept: "form fields". The form field is a
     // TextField.vue
     import TextInput from './TextInput.vue';
     import FormGroup from './FormGroup.vue';
+
     export default {
-        components: { TextIput, FormGroup },
+        components: { TextInput, FormGroup },
         props: {
             label: String,
             help: String,
@@ -107,9 +109,9 @@ Let's reduce it by introducing a new concept: "form fields". The form field is a
     };
 </script>
 <template>
-<form-group :label="label" :help="help">
-    <text-input v-bind="$attrs" v-on="$listeners">
-</form-group>
+    <form-group :label="label" :help="help">
+        <text-input v-bind="$attrs" v-on="$listeners">
+    </form-group>
 </template>
 ```
 
@@ -143,6 +145,7 @@ The form controller requires the following properties:
     // EditUserForm.vue
     import { FormController } from 'vue-forms-kit';
     import TextField from './TextField.vue';
+
     export default {
         components: { FormController, TextField },
         data() {
