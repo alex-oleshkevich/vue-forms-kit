@@ -228,18 +228,6 @@ For example, "error@example.com".
 
 More information about validation, submission, and error handling you can find in other sections.
 
-## Styling
-
 ## Form Validation
 
 ## Submit handlers
-
-## Displaying errors
-
-## Setting form group errors
-
-## Custom errors, labels and help messages.
-
-## Built-in fields
-
-## Building custom elements
