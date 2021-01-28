@@ -73,7 +73,7 @@ export default {
                     this.$emit('response', response);
                 } catch (e) {
                     this.state = FormState.ERROR;
-                    let { message, errors } = this.errorHandler(e);
+                    let { message, errors } = await this.errorHandler(e);
                     this.setMessage(message);
                     this.setErrors(errors);
                     this.$emit('error', e);
