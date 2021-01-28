@@ -4,18 +4,32 @@ A set of primitives to build your own forms and inputs with low effort.
 
 ## Architecture
 
-Unlike many other libraries, this one does not provide you ready-to-use components.
-Instead, it gives you multiple building bricks to create your own form and inputs
-that match your design system without too much boilerplate code.
+Unlike many other libraries, this one aims to provide a low-level set of renderless components
+that you may compose to create a higher lever form inputs. The library doesn't enforce any styling
+deferring that decision to a developer. It also ships with a collection of ready-to-use form inputs
+that you can style and use in your project, or use them as a reference. Moreover, it is better
+to implement your form components in the project using these components.
 
-The idea is to use renderless components which encapsulate common properties and methods, and expose them for your form input components.
-You, as the developer, have only to worry about styling and customizing the form inputs leaving the job to the library.
+The core building blocks are input, form group, and form.
 
-For example, the simplest usage may look like this:
+-   "input" is the most simple form element that renders a native form element or Vue component.
+-   "form group" is an optional decorator for the input component that enhances it with extra functionality like errors, help text, or labels.
+-   "form" is an (optional) element, that operates with user input data, performs validation, and can handle the form submission.
+    It also propagates validation errors to the child form groups.
+
+## Quick start
+
+In this mini-tutorial, we are going to create a simple form with form groups and form inputs.
+This form will ask for user information, perform validation and submit the data.
+The tutorial assumes that you are familiar with scoped slots.
+
+### Form inputs
+
+Lets that with the smallest entity - the form input:
 
 ```html
 <script>
-    // EmailInput.vue
+    // TextInput.vue
     import { InputController } from 'vue-forms-kit';
     export default {
         components: { InputController },
@@ -23,99 +37,164 @@ For example, the simplest usage may look like this:
 </script>
 <template>
     <input-controller v-on="$listeners" v-slot="{onInput}">
-        <input type="email" v-bind="$attrs" @input="onInput" />
+        <input type="text" v-bind="$attrs" @input="onInput" />
     </input-controller>
 </template>
 ```
 
-## Base primitives
+We just created a simple text input. In real life, you would need handlers for "change", "focus", and "blur" events. At this stage, you can already start using the `<text-input />` component in your forms.
 
-Here the list of base primitives that library operates with.
+### Form groups
 
-### InputController
-
-This component wraps an input (either standard HTMLElement or any other custom component)
-and exposes basic API to interact with it.
+Okay, let's decorate it with a label, with help text and validation errors.
+First, we will create a "form group" component that will receive label text and help text via properties.
 
 ```html
 <script>
-    // EmailInput.vue
-    import { InputController } from 'vue-forms-kit';
+    // FormGroup.vue
+    import { FormGroupController } from 'vue-forms-kit';
     export default {
-        components: { InputController },
+        components: { FormGroupController },
+        props: {
+            label: String,
+            help: String,
+        },
     };
 </script>
 <template>
-    <input-controller v-on="$listeners" v-slot="{onInput}">
-        <input name="email" type="email" v-bind="$attrs" @input="onInput" />
-    </input-controller>
+    <form-group-controller v-slot="{required, errors}">
+        <div class="form-group">
+            <label class="form-label">
+                <span>{{ label }}</span>
+                <span class="form-label-asterisk" v-if="required">*</span>
+            </label>
+            <slot></slot>
+            <div v-if="help" class="form-help">{{ help }}</div>
+            <ul v-if="errors" class="form-errors">
+                <li v-for="(error, index) in errors" :key="error + index">
+                    {{ error}}
+                </li>
+            </ul>
+        </div>
+    </form-group-controller>
 </template>
 ```
 
-Note, it is strictly recommended to define "name" attribute when using components built with this library.
-The "name" attribute later used to property set validation errors.
-If you omit "name" then a default name will be generated and you will not have access to validation errors for such inputs.
-The usage of the `EmailInput` component we defined may be like this:
+We created a form group component that decorates `TextInput`. You can implement any other features like icons, floating labels, and so on. The usage may look like this:
 
 ```html
-<email-input name="email" />
+<form-group label="Your email" help="The email address must include @ sign">
+    <text-input name="email">
+</form-group>
 ```
 
-`v-model` omitted for this demo.
+### Form fields
 
-Please note, that we used `v-on="$listeners"` on `input-controller` tag because we want all listeners from the outer scope
-to be directly passed to `input-controller` components. Otherwise your `v-model` would not work.
-Of course, you can have your own event handlers if you wish:
+When you have many forms it feels like you are writing a lot of boilerplate code.
+Let's reduce it by introducing a new concept: "form fields". The form field is a component that combines inputs and form groups into a new one.
 
 ```html
 <script>
-    // EmailInput.vue
-    import { InputController } from 'vue-forms-kit';
+    // TextField.vue
+    import TextInput from './TextInput.vue';
+    import FormGroup from './FormGroup.vue';
     export default {
-        components: { InputController },
+        components: { TextIput, FormGroup },
+        props: {
+            label: String,
+            help: String,
+        }
+    };
+</script>
+<template>
+<form-group :label="label" :help="help">
+    <text-input v-bind="$attrs" v-on="$listeners">
+</form-group>
+</template>
+```
+
+Now our form becomes cleaner:
+
+```html
+<text-field
+    name="email"
+    label="Your email"
+    help="The email address must include @ sign"
+></text-field>
+```
+
+### Forms
+
+Once we have building blocks, let's create our form component with these requirements:
+
+-   it must validate email address length and report an error when invalid
+-   it must submit the form via our function
+-   it must render errors returned by the submit handler
+
+We won't create a new Vue component for the form in this example. So let's use `FormController` to achieve our goal.
+The form controller requires the following properties:
+
+-   `data` - the object containing all user input
+-   `handler` - a function that handles form submission
+-   `validator` - an optional function that performs validation. It must return a key-value mapping where keys are field names and values are errors for the field.
+
+```html
+<script>
+    // EditUserForm.vue
+    import { FormController } from 'vue-forms-kit';
+    import TextField from './TextField.vue';
+    export default {
+        components: { FormController, TextField },
+        data() {
+            return {
+                formData: {
+                    first_name: '',
+                    last_name: '',
+                    email: '',
+                },
+            };
+        },
         methods: {
-            onComponentInput(value) {
-                this.$emit('input', value);
+            async validate(formData) {
+                let errors = {};
+                if (!formData.email) {
+                    errors.email = 'This field is required.';
+                }
+                return errors;
+            },
+            async submit(formData) {
+                // does nothing for now, but you may issue an API call in this place
             },
         },
     };
 </script>
 <template>
-    <input-controller @input="onComponentInput" v-slot="{onInput}">
-        <input name="email" type="email" v-bind="$attrs" @input="onInput" />
-    </input-controller>
+    <form-controller
+        :data="formData"
+        :handler="submit"
+        :validator="validate"
+        v-slot="{state, message}"
+    >
+        <div v-if="message">Error message: {{ message }}</div>
+        <text-field name="first_name" v-model="formData.first_name" />
+        <text-field name="last_name" v-model="formData.last_name" />
+        <text-field
+            type="email"
+            name="email"
+            required
+            v-model="formData.email"
+        />
+        <button type="submit" :disabled="state === 'loading'">Submit</button>
+    </form-controller>
 </template>
 ```
 
-For the same purpose we passed `v-bind="$attrs"` to the `input` tag. This is just to avoid explicitly setting up attributes.
-Both `$listeners` and `$attrs` are optional and referenced here as an example. You have full control over your code.
+The form is ready to use. I want to point you at some moments.
+First, the form exposes the `state` property that you can use to react to form state transition.
+For example, we disabled the submit button while the form was handling the submission.
+Second, if the API returns an error message, we can display it to use. Use the `message` key to access the message value.
 
-### Props
-
-By default, `InputController` will use `this.$el` as a input tag. Sometimes it is not enough and you have another HTML element
-to use as the input. In this case your can specify `input-selector` property to hint the desired element.
-`input-selector` accept any CSS select that is also valid for `querySelector` native method.
-
-```html
-<input-controller input-selector="#input">
-    <div>
-        <input id="input" />
-    </div>
-</input-controller>
-```
-
-### Default slot exposes:
-
--   `inputId`, `inputName` - a value of element's "id" or "name" attribute. Autogenerated when missing.
--   `onInput`, `onChange`, `onFocus`, `onBlur`- default handlers for common events.
-
-Usage:
-
-```html
-<input-controller
-    v-slot="{inputId, inputName, onInput, onChange, onFocus, onBlur}"
-/>
-```
+More information about validation, submission, and error handling you can find in other sections.
 
 ## Styling
 
@@ -132,7 +211,3 @@ Usage:
 ## Built-in fields
 
 ## Building custom elements
-
-```
-
-```
