@@ -10,6 +10,8 @@ yarn install vue-forms-kit
 npm i vue-forms-kit
 ```
 
+**Note:** The package does not provide transpiled JavaScript files. Use it with module bundlers.
+
 ## Architecture
 
 Unlike many other libraries, this one aims to provide a low-level set of renderless components
