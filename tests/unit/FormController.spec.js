@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
-import { FormState, TextField, FormController } from '../../src/index.js';
+import { FormController, FormState } from '../../src/';
+import TextField from './TextField.vue';
 import { nextTick } from 'vue';
 
 const noop = async () => {};

@@ -1,5 +1,5 @@
 <script>
-import FormGroupController from './FormGroupController';
+import { FormGroupController } from '../../src/';
 
 export default {
     components: { FormGroupController },
@@ -16,7 +16,7 @@ export default {
         v-slot="{ errors, required, inputId, valid }"
         :errors="errors"
     >
-        <div class="form-group" :class="{'invalid': !valid}">
+        <div class="form-group" :class="{ invalid: !valid }">
             <label class="form-label" :for="inputId">
                 <slot name="label" :label="label" :required="required">
                     <span>{{ label }}</span>
@@ -29,7 +29,10 @@ export default {
                     {{ help }}
                 </slot>
             </div>
-            <div class="form-errors" v-if="errors.length || $scopedSlots.errors">
+            <div
+                class="form-errors"
+                v-if="errors.length || $scopedSlots.errors"
+            >
                 <slot name="errors" :errors="errors">
                     <ul>
                         <li

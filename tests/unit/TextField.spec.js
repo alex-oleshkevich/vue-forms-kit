@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { TextField } from '../../src/index.js';
+import TextField from './TextField.vue';
 
 describe('TextField.js', () => {
     it('renders label', () => {

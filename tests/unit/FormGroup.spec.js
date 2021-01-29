@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
-import { FormGroup, TextInput } from '../../src/index.js';
 import { nextTick } from 'vue';
+import FormGroup from './FormGroup.vue';
+import TextInput from './TextInput.vue';
 
 describe('FormGroup.js', () => {
     it('renders input', async () => {

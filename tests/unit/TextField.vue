@@ -1,6 +1,6 @@
 <script>
-import FormGroup from './FormGroup';
-import TextInput from './TextInput';
+import FormGroup from './FormGroup.vue';
+import TextInput from './TextInput.vue';
 
 export default {
     components: { FormGroup, TextInput },

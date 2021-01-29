@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { TextInput } from '../../src/index.js';
+import TextInput from './TextInput.vue';
 
 describe('TextInput.js', () => {
     it('sets text type', () => {

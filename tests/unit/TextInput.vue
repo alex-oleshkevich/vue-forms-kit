@@ -1,5 +1,5 @@
 <script>
-import InputController from './InputController';
+import { InputController } from '../../src/';
 
 export default {
     components: { InputController },
