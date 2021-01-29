@@ -17,8 +17,6 @@ export function guessErrorHandler(e) {
         return { message, errors };
     }
 
-    // console.error(e.response)
-
     return {
         message: e.toString(),
         errors: {},

@@ -103,6 +103,7 @@ describe('FormController.js', () => {
         await nextTick(); // state transition to ERROR
 
         expect(wrapper.get('#state').text()).toEqual(FormState.ERROR);
+        await nextTick(); // rendering errors
 
         expect(
             wrapper
@@ -133,6 +134,7 @@ describe('FormController.js', () => {
         await wrapper.find('form').trigger('submit');
         await nextTick(); // state transition to LOADING
         await nextTick(); // state transition to ERROR
+        await nextTick(); // rendering errors
 
         expect(wrapper.find('form .form-group').text()).toEqual(
             'Error handled.',
